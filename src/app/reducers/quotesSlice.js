@@ -5,7 +5,6 @@ export const fetchQuotes = createAsyncThunk("fetchQuotes", async () => {
     "https://api.quotable.io/quotes/random?limit=12"
   );
   const quotes = await response.json();
-  console.log("STEP 1 - in FETCHQUORES", quotes);
   return quotes;
 });
 
@@ -15,9 +14,7 @@ export const fetchTrendingQuotes = createAsyncThunk(
     const response = await fetch(
       `https://api.quotable.io/quotes?tags=${tagname}`
     );
-
     const quotes = await response.json();
-    console.log("FTRERE", quotes);
     return quotes.results;
   }
 );
@@ -35,22 +32,30 @@ const quotesSlice = createSlice({
       state.push({});
     },
     likeQuote: (state, action) => {
-      console.log("in LikeQuote", action, state);
-      const quote = state.quotesFeed.find(
+      let quote = state.quotesFeed.find(
         (quote) => quote._id === action.payload
       );
 
-      quote.isLiked = !quote.isLiked;
+      if (!quote) {
+        quote = state.trendingQuotes.find(
+          (quote) => quote._id === action.payload
+        );
+      }
+
+      if (quote) {
+        quote.isLiked = !quote.isLiked;
+      }
 
       // if already liked remove from likedQuotes, or else add.
       const quoteExists = state.likedQuotes.find(
         (quote) => quote._id === action.payload
       );
+
       if (!quoteExists) {
         state.likedQuotes.push(quote);
       } else {
-        state.likedQuotes.filter(
-          (quote, index) => action.payload !== quote._id
+        state.likedQuotes = state.likedQuotes.filter(
+          (quote, index) => quote._id != action.payload
         );
       }
     },

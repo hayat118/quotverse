@@ -1,22 +1,15 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useDispatch } from "react-redux";
 import {
   HeartIcon,
   ChatBubbleOvalLeftIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconActive } from "@heroicons/react/24/solid";
 
-import {
-  quotesAdded,
-  fetchQuotes,
-  selectQuotesFeed,
-  likeQuote,
-} from "./quotesSlice";
+import { likeQuote } from "../app/reducers/quotesSlice";
 
 const Quote = ({ quote }) => {
   const dispatch = useDispatch();
-  //   const quotes = useSelector(selectQuotesFeed);
 
   const handleLikeQuote = (id) => {
     dispatch(likeQuote(id));
@@ -32,10 +25,17 @@ const Quote = ({ quote }) => {
         <h2 className="font-semibold">{quote.author}</h2>
         <p>{quote.content}</p>
         <div className="flex space-x-8  ">
-          <HeartIcon
-            className={quote.isLiked ? "h-6 w-6 text-red-800" : "h-6 w-6 "}
-            onClick={() => handleLikeQuote(quote._id)}
-          />
+          {quote.isLiked ? (
+            <HeartIconActive
+              onClick={() => handleLikeQuote(quote._id)}
+              className="h-6 w-6 text-red-500 cursor-pointer "
+            />
+          ) : (
+            <HeartIcon
+              onClick={() => handleLikeQuote(quote._id)}
+              className="h-6 w-6 cursor-pointer"
+            />
+          )}
           <ChatBubbleOvalLeftIcon className="h-6 w-6" />
           <PaperAirplaneIcon className="h-6 w-6" />
         </div>

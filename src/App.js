@@ -1,20 +1,12 @@
 import React from "react";
 
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-  Link,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import logo from "./logo.svg";
-import { Counter } from "./features/counter/Counter";
-import Home from "./features/home/home";
-import LikedQuotes from "./features/home/LikedQuotes";
-import TrendingQuotes from "./features/home/TrendingQuotes";
 import "./App.css";
-
-import Layout from "./features/home/Layout";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+import LikedQuotes from "./components/LikedQuotes";
+import TrendingQuotes from "./components/TrendingQuotes";
 
 const router = createBrowserRouter([
   {

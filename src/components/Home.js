@@ -1,35 +1,33 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { HeartIcon } from "@heroicons/react/24/outline";
-
 import {
-  quotesAdded,
   fetchQuotes,
+  selectLoadStatus,
   selectQuotesFeed,
-  likeQuote,
-} from "./quotesSlice";
+} from "../app/reducers/quotesSlice";
 
 import Quote from "./Quote";
 
 const Home = () => {
   const dispatch = useDispatch();
   const quotes = useSelector(selectQuotesFeed);
+  const loadStatus = useSelector(selectLoadStatus);
 
   useEffect(() => {
-    dispatch(fetchQuotes());
+    if (!quotes.length) {
+      dispatch(fetchQuotes());
+    }
   }, []);
-
-  const handleLikeQuote = (id) => {
-    dispatch(likeQuote(id));
-  };
 
   return (
     <div>
       <div className="space-y-6">
-        {quotes.map((quote, i) => (
-          <Quote key={i} quote={quote} />
-        ))}
+        {loadStatus != "loading" ? (
+          quotes.map((quote, i) => <Quote key={i} quote={quote} />)
+        ) : (
+          <div className="text-left p-4">Loading... </div>
+        )}
       </div>
     </div>
   );
