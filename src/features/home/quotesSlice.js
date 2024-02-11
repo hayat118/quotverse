@@ -53,10 +53,8 @@ const quotesSlice = createSlice({
   },
 });
 
-export const selectQuotesFeed = (state) => {
-  console.log(state, "STATTTTE");
-  return state.quotes.quotesFeed;
-};
+export const selectQuotesFeed = (state) => state.quotes.quotesFeed;
+export const selectLikedQuotes = (state) => state.quotes.likedQuotes;
 
 export const { quotesAdded, likeQuote } = quotesSlice.actions;
 

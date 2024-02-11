@@ -1,10 +1,40 @@
 import React from "react";
+
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Link,
+} from "react-router-dom";
+
 import logo from "./logo.svg";
 import { Counter } from "./features/counter/Counter";
 import Home from "./features/home/home";
+import LikedQuotes from "./features/home/LikedQuotes";
 import "./App.css";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "liked",
+        element: <LikedQuotes />,
+      },
+    ],
+  },
+]);
+
 function App() {
+  return <RouterProvider router={router} />;
+}
+
+function Layout() {
   return (
     <div className="App">
       {/* <Counter /> */}
@@ -17,10 +47,15 @@ function App() {
 
         <div className="col-span-6">
           <div>
-            <p>Home</p>
-            <p>Like</p>
+            <p>
+              <Link to="/">Home</Link>
+            </p>
+            <p>
+              <Link to="/liked">Like</Link>
+            </p>
           </div>
-          <Home />
+          {/* <Home /> */}
+          <Outlet />
         </div>
 
         <div className="col-span-3">

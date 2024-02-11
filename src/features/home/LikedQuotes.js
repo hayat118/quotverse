@@ -7,14 +7,15 @@ import {
   quotesAdded,
   fetchQuotes,
   selectQuotesFeed,
+  selectLikedQuotes,
   likeQuote,
 } from "./quotesSlice";
 
 import Quote from "./Quote";
 
-const Home = () => {
+const LikedQuotes = () => {
   const dispatch = useDispatch();
-  const quotes = useSelector(selectQuotesFeed);
+  const quotes = useSelector(selectLikedQuotes);
 
   useEffect(() => {
     dispatch(fetchQuotes());
@@ -26,13 +27,19 @@ const Home = () => {
 
   return (
     <div>
-      <div className="space-y-6">
-        {quotes.map((quote, i) => (
-          <Quote key={i} quote={quote} />
-        ))}
-      </div>
+      {quotes.length ? (
+        <div className="space-y-6">
+          {quotes.map((quote, i) => {
+            return <Quote key={i} quote={quote} />;
+          })}
+        </div>
+      ) : (
+        <div>
+          <h3>No quotes liked yet</h3>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Home;
+export default LikedQuotes;
