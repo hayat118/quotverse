@@ -43,7 +43,7 @@ const Quote = ({ quote }) => {
         <p>
           {quote.tags.map((tag, j) => (
             <span className="text-sm text-gray-500" key={j}>
-              {tag}
+              {tag} &nbsp;
             </span>
           ))}
         </p>

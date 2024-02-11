@@ -1,17 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchQuotes = createAsyncThunk("fetchQuotes", async () => {
-  const response = await fetch("https://api.quotable.io/quotes/random?limit=3");
+  const response = await fetch(
+    "https://api.quotable.io/quotes/random?limit=12"
+  );
   const quotes = await response.json();
   console.log("STEP 1 - in FETCHQUORES", quotes);
   return quotes;
 });
+
+export const fetchTrendingQuotes = createAsyncThunk(
+  "fetchTrendingQuotes",
+  async (tagname) => {
+    const response = await fetch(
+      `https://api.quotable.io/quotes?tags=${tagname}`
+    );
+
+    const quotes = await response.json();
+    console.log("FTRERE", quotes);
+    return quotes.results;
+  }
+);
 
 const quotesSlice = createSlice({
   name: "quotes",
   initialState: {
     quotesFeed: [],
     likedQuotes: [],
+    trendingQuotes: [],
     status: "idle",
   },
   reducers: {
@@ -47,14 +63,24 @@ const quotesSlice = createSlice({
       })
       .addCase(fetchQuotes.fulfilled, (state, action) => {
         state.status = "idle";
-        console.log("STEP 2 - inside reducer", action);
         state.quotesFeed = action.payload;
+      });
+
+    builder
+      .addCase(fetchTrendingQuotes.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTrendingQuotes.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.trendingQuotes = action.payload;
       });
   },
 });
 
 export const selectQuotesFeed = (state) => state.quotes.quotesFeed;
 export const selectLikedQuotes = (state) => state.quotes.likedQuotes;
+export const selectTrendingQuotes = (state) => state.quotes.trendingQuotes;
+export const selectLoadStatus = (state) => state.quotes.status;
 
 export const { quotesAdded, likeQuote } = quotesSlice.actions;
 
